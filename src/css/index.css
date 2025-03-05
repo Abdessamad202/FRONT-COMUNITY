@@ -1,0 +1,36 @@
+@import "tailwindcss";
+@import "react-toastify/dist/ReactToastify.css";
+@import "react-lazy-load-image-component/src/effects/blur.css";
+
+.step {
+  width: 100px;
+}
+#root {
+  overflow: hidden;
+}
+span{
+  display: block ! important;
+}
+@keyframes spin-grow {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.5;
+  }
+  50% {
+    transform: scale(1.5) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+.animate-spin-grow {
+  animation: spin-grow 1.2s infinite ease-in-out;
+}
+textarea:focus{
+  outline: none;
+}
+.notify{
+  z-index: 10000;
+}
+.break-inside-avoid{
+  height: fit-content !important;
+}
