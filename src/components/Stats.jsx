@@ -7,7 +7,7 @@ const Stats = () => {
     <div className="relative">
       <div className="absolute inset-0">
         <img
-          src="http://localhost:8000/imgs/panners/pic2.jpg"
+          src="http://backend_comunity_app.test/imgs/panners/pic2.jpg"
           alt="Community background"
           className="w-full h-full object-cover"
         />
