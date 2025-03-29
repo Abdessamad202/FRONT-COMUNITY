@@ -7,7 +7,7 @@ const HeroSection = () => {
     <div className="relative overflow-hidden">
       <div className="absolute inset-0">
         <img
-          src="http://localhost:8000/imgs/panners/pic1.jpg"
+          src="http://backend_comunity_app.test/imgs/panners/pic1.jpg"
           alt="People collaborating"
           className="w-full h-full object-cover"
         />
