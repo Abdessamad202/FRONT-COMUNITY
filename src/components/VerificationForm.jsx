@@ -4,15 +4,13 @@ import { useContext, useState } from 'react'; // React hooks
 import { useMutation } from '@tanstack/react-query'; // React Query for data fetching and mutation
 import { UserContext } from '../context/UserContext'; // Context to access user data
 import { NotificationContext } from '../context/NotificationContext'; // Context for notifications
-import {  reSendCode, verificationByLocation } from '../api/apiCalls'; // API calls for verification and resending code
+import {   resendVerificationEmailCode, verificationByLocation } from '../api/apiCalls'; // API calls for verification and resending code
 import { handleInputChange } from '../utils/handlers'; // Utility for input change handling
 import SubmitBtn from './SubmitBtn'; // Submit button component
 
 const VerificationForm = () => {
   const navigate = useNavigate();
   const {pathname} = useLocation();
-  console.log(pathname === "/verify-code");
-
   const [formData, setFormData] = useState({ code: '' }); // State to hold the verification code
   const notify = useContext(NotificationContext); // Notification context to show messages
   const { user, setUser } = useContext(UserContext); // Access user data from context
@@ -24,20 +22,32 @@ const VerificationForm = () => {
     mutationFn: ({ pathname,id, formData }) => verificationByLocation(pathname,id,formData), // Dynamic data for user ID and form data
     onSuccess: (data) => {
       notify('success', data.message); // Notify on successful verification
-      setUser((prev) => ({ ...prev, ...data.user})); // Update user context with new step
-      navigate(pathname === "/verify-code" ? '/change-password' : '/profile'); // Redirect to verification code page
+      // setUser((prev) => ({ ...prev, ...data.user})); // Update user context with new step
+
+      navigate('/complete-profile'); // Redirect to verification code page
       setErrors({});
     },
     onError: (error) => {
-      notify('error', 'Verification failed. Try again.'); // Notify on error
-      setErrors(error.response?.data?.errors || { general: 'Verification failed. Try again.' }); // Set error messages
-      console.log(error)
+      const responseData = error.response?.data; // Get response data
+  
+      if (error.response?.status === 409) {
+        notify("error", responseData?.message);
+        // setUser(responseData?.user);
+  
+        if (responseData?.registration_status === "verified") {
+          navigate("/complete-profile"); // Redirect to email verification page
+        }else {
+          navigate("/home"); // Redirect to email verification page
+        }
+      }
+  
+      setErrors(responseData?.errors || { general: "verification failed. Try again." });
     },
   })
 
   // Mutation for resending the verification code
   const { mutate: resendingCode, isPending: isReSending } = useMutation({
-    mutationFn: ({ pathname,id }) => reSendCode(pathname,id), // Dynamic user ID
+    mutationFn: () => resendVerificationEmailCode(),
     onSuccess: (data) => {
       console.log(data.user);
 
@@ -45,7 +55,15 @@ const VerificationForm = () => {
       setErrors({});
     },
     onError: (error) => {
-      notify('error', 'Failed to resend code. Try again.'); // Notify on resend failure
+      const status = error.response?.status
+      if(status === 409){
+        if(error.response.data?.registration_status === "verified"){
+          navigate('/complete-profile')
+        }else {
+          navigate('/home')
+        }
+      }
+      notify('info',error.response.data?.message ); // Notify on resend failure
       setErrors(error.response?.data?.errors || { general: 'Failed to resend code. Try again.' }); // Set error messages
     },
   });
