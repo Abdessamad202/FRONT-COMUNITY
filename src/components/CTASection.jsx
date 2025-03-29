@@ -7,7 +7,7 @@ const CTASection = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <div className="rounded-xl overflow-hidden">
           <img
-          src="http://localhost:8000/imgs/cards/pic5.jpg"
+          src="http://backend_comunity_app.test/imgs/cards/pic5.jpg"
             alt="Community members"
             className="w-full h-[400px] object-cover"
           />
