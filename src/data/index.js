@@ -5,25 +5,25 @@ export const cardData = [
     icon: Users,
     title: "Active Members",
     description: "Connect with passionate individuals from around the world.",
-    img: "http://localhost:8000/imgs/cards/pic1.jpg",
+    img: "http://backend_comunity_app.test/imgs/cards/pic1.jpg",
   },
   {
     icon: MessageCircle,
     title: "Discussions",
     description: "Engage in meaningful conversations about topics that matter.",
-    img: "http://localhost:8000/imgs/cards/pic2.jpg",
+    img: "http://backend_comunity_app.test/imgs/cards/pic2.jpg",
   },
   {
     icon: Calendar,
     title: "Events",
     description: "Participate in regular meetups, workshops, and conferences.",
-    img: "http://localhost:8000/imgs/cards/pic3.jpg",
+    img: "http://backend_comunity_app.test/imgs/cards/pic3.jpg",
     },
   {
     icon: BookOpen,
     title: "Resources",
     description: "Access a wealth of knowledge and learning materials.",
-    img: "http://localhost:8000/imgs/cards/pic4.jpg",
+    img: "http://backend_comunity_app.test/imgs/cards/pic4.jpg",
   },
 ];
 
