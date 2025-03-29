@@ -23,7 +23,7 @@ const RegisterForm = () => {
     onSuccess: (data) => { // On successful registration
       notify("success", data.message); // Show success notification
       setUser(data.user); // Set user data in context
-      navigate('/verify'); // Navigate to verification page
+      navigate('/verify-email'); // Navigate to verification page
     },
     onError: (error) => { // On failed registration
       notify("error", "Registration failed. Try again."); // Show error notification
