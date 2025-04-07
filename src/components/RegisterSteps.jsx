@@ -21,7 +21,7 @@ const RegisterSteps = ({ status }) => {
             <span>1</span>
           </div>
           {/* Step description */}
-          <p className="text-xs text-gray-600">Register</p>
+          <div className="text-xs text-gray-600">Register</div>
         </div>
 
         {/* Step 2 - Verify Email */}
@@ -33,7 +33,7 @@ const RegisterSteps = ({ status }) => {
             <span>2</span>
           </div>
           {/* Step description */}
-          <p className="text-xs text-gray-600">Verify Email</p>
+          <div className="text-xs text-gray-600">Verify Email</div>
         </div>
 
         {/* Step 3 - Complete Profile */}
@@ -45,7 +45,7 @@ const RegisterSteps = ({ status }) => {
             <span>3</span>
           </div>
           {/* Step description */}
-          <p className="text-xs text-gray-600">Complete Profile</p>
+          <div className="text-xs text-gray-600">Complete Profile</div>
         </div>
       </div>
     </div>

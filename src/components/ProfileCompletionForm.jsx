@@ -76,7 +76,7 @@ const ProfileCompletionForm = () => {
                   ${errors.name ? "border-red-500 focus:ring-red-500" : "focus:ring-indigo-500 focus:border-transparent"}`}
           />
         </div>
-        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
+        {errors.name && <div className="text-red-500 text-xs mt-1">{errors.name}</div>}
       </div>
 
       {/* Date of Birth Field */}
@@ -93,12 +93,12 @@ const ProfileCompletionForm = () => {
                   ${errors.date_of_birth ? "border-red-500 focus:ring-red-500" : "focus:ring-indigo-500 focus:border-transparent"}`}
           />
         </div>
-        {errors.date_of_birth && <p className="text-red-500 text-xs mt-1">{errors.date_of_birth}</p>}
+        {errors.date_of_birth && <div className="text-red-500 text-xs mt-1">{errors.date_of_birth}</div>}
       </div>
 
       {/* Sex Selection - Radio Buttons */}
       <div>
-        <p className="text-gray-700 font-medium mb-2">Select your sex:</p>
+        <div className="text-gray-700 font-medium mb-2">Select your sex:</div>
         <div className="flex gap-4 justify-center">
           {/* Male Option */}
           <label className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition ${formData.gender === 'M' ? 'bg-indigo-100 border-indigo-500' : 'border-gray-300'}`}>
@@ -117,7 +117,7 @@ const ProfileCompletionForm = () => {
             <span className="text-gray-700 font-medium">Female</span>
           </label>
         </div>
-        {errors.gender && <p className="text-red-500 text-xs text-center mt-1">{errors.sex}</p>}
+        {errors.gender && <div className="text-red-500 text-xs text-center mt-1">{errors.gender}</div>}
       </div>
 
       {/* Submit Button */}

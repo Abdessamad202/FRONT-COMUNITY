@@ -57,7 +57,7 @@ const RegisterForm = () => {
               placeholder="Email address"
             />
           </div>
-          {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>} {/* Show error message if any */}
+          {errors.email && <div className="mt-1 text-sm text-red-500">{errors.email}</div>} {/* Show error message if any */}
         </div>
 
         {/* Password Input */}
@@ -74,7 +74,7 @@ const RegisterForm = () => {
                   ${errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-indigo-500 focus:border-transparent"}`} // Conditional class for error state
             />
           </div>
-          {errors.password && <p className="mt-1 text-sm text-red-500">{errors.password}</p>} {/* Show error message if any */}
+          {errors.password && <div className="mt-1 text-sm text-red-500">{errors.password}</div>} {/* Show error message if any */}
         </div>
 
         {/* Submit Button */}

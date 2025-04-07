@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'; // React hooks
 import { useMutation } from '@tanstack/react-query'; // React Query for data fetching and mutation
 import { UserContext } from '../context/UserContext'; // Context to access user data
 import { NotificationContext } from '../context/NotificationContext'; // Context for notifications
-import {   resendVerificationEmailCode, sendResetPasswordCode, validateResetCode, verificationByLocation } from '../api/apiCalls'; // API calls for verification and resending code
+import {   sendResetPasswordCode, validateResetCode} from '../api/apiCalls'; // API calls for verification and resending code
 import { handleInputChange } from '../utils/handlers'; // Utility for input change handling
 import SubmitBtn from './SubmitBtn'; // Submit button component
 

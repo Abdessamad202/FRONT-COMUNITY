@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'; // React hooks
 import { useMutation } from '@tanstack/react-query'; // React Query for data fetching and mutation
 import { UserContext } from '../context/UserContext'; // Context to access user data
 import { NotificationContext } from '../context/NotificationContext'; // Context for notifications
-import {   resendVerificationEmailCode, verificationByLocation } from '../api/apiCalls'; // API calls for verification and resending code
+import {   resendVerificationEmailCode, VerificationEmail} from '../api/apiCalls'; // API calls for verification and resending code
 import { handleInputChange } from '../utils/handlers'; // Utility for input change handling
 import SubmitBtn from './SubmitBtn'; // Submit button component
 
@@ -19,7 +19,7 @@ const VerificationForm = () => {
 
   // Mutation for verifying the code
   const { mutate: verifyCode, isPending: isVerifying } = useMutation({
-    mutationFn: ({ pathname,id, formData }) => verificationByLocation(pathname,id,formData), // Dynamic data for user ID and form data
+    mutationFn: (data) => VerificationEmail(data), // Dynamic data for user ID and form data
     onSuccess: (data) => {
       notify('success', data.message); // Notify on successful verification
       // setUser((prev) => ({ ...prev, ...data.user})); // Update user context with new step
@@ -30,8 +30,8 @@ const VerificationForm = () => {
     onError: (error) => {
       const responseData = error.response?.data; // Get response data
   
+      notify("error", responseData?.message);
       if (error.response?.status === 409) {
-        notify("error", responseData?.message);
         // setUser(responseData?.user);
   
         if (responseData?.registration_status === "verified") {
@@ -40,8 +40,7 @@ const VerificationForm = () => {
           navigate("/home"); // Redirect to email verification page
         }
       }
-  
-      setErrors(responseData?.errors || { general: "verification failed. Try again." });
+      setErrors(responseData?.errors || { general:error.response.data?.message });
     },
   })
 
@@ -64,14 +63,14 @@ const VerificationForm = () => {
         }
       }
       notify('info',error.response.data?.message ); // Notify on resend failure
-      setErrors(error.response?.data?.errors || { general: 'Failed to resend code. Try again.' }); // Set error messages
+      setErrors(error.response?.data?.errors || { general: error.response.data?.message  }); // Set error messages
     },
   });
 
   // Handle form submission for code verification
   const handleSubmit = (e) => {
     e.preventDefault();
-    verifyCode({ pathname ,id, formData }); // Pass dynamic user ID and form data
+    verifyCode(formData ); // Pass dynamic user ID and form data
   };
 
   // Handle code resend request
@@ -94,13 +93,14 @@ const VerificationForm = () => {
               onChange={(e) => handleInputChange(e, setFormData, setErrors)} // Handle input change
               value={formData.code}
               className={`w-full pl-12 pr-4 py-3 rounded-lg border focus:ring-2 transition outline-none
-                ${errors.code ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500 focus:border-transparent'}
+                ${errors.code || errors.general ? 'border-red-500 focus:ring-red-500' : 'focus:ring-indigo-500 focus:border-transparent'}
               `}
               placeholder="Verification code"
               required
             />
           </div>
-          {errors.code && <p className="text-red-500 text-xs mt-1">{errors.code}</p>} {/* Display error if any */}
+          {errors.code && <div className="text-red-500 text-xs mt-1">{errors.code }</div>} {/* Display error if any */}
+          {errors.general && <div className="text-red-500 text-xs mt-1">{errors.general }</div>} {/* Display error if any */}
         </div>
 
         {/* Submit Button */}
@@ -108,7 +108,7 @@ const VerificationForm = () => {
       </form>
 
       {/* Resend Code Link */}
-      <p className="mt-6 text-center text-sm text-gray-600">
+      <div className="mt-6 text-center text-sm text-gray-600">
         {"Didn't"} receive the code?{' '}
         <Link
           to=""
@@ -118,7 +118,7 @@ const VerificationForm = () => {
         >
           {isReSending ? 'Resending...' : 'Resend Code'} {/* Change text while resending */}
         </Link>
-      </p>
+      </div>
     </>
   );
 };

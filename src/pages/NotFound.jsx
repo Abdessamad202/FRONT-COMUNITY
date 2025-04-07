@@ -13,9 +13,9 @@ const NotFound = () => {
 
         {/* Title & Message */}
         <h2 className="text-2xl font-bold text-gray-800">404 - Page Not Found</h2>
-        <p className="text-gray-600 mt-2">
+        <div className="text-gray-600 mt-2">
           The page you are looking for{"doesn't"} exist or has been moved.
-        </p>
+        </div>
 
         {/* Back to Home Button */}
         <Link
