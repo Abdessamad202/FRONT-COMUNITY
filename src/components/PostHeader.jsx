@@ -7,7 +7,10 @@ export default function PostHeader({ post, user, handleDeletePost, handleUpdateP
     const [showActions, setShowActions] = useState(false);
     const toggleDd = useRef(null);
 
-    const toggleDropdown = () => setShowActions(!showActions);
+    const toggleDropdown = (e) => {
+        e.preventDefault();
+        setShowActions(!showActions)
+    };
     
     const isPostOwner = user?.id === post.user_id;
     console.log(post ,user);
@@ -49,11 +52,11 @@ export default function PostHeader({ post, user, handleDeletePost, handleUpdateP
                     </button>
 
                     {showActions && (
-                        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-md z-10">
+                        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded-lg shadow-md z-30" onClick={(e) => e.preventDefault()}>
                             <button
-                                onClick={() => {
+                                onClick={(e) => {
                                     setShowActions(false);
-                                    handleUpdatePost(); // Trigger the update modal
+                                    handleUpdatePost(e); // Trigger the update modal
                                 }}
                                 className="w-full flex items-center px-4 py-2 text-sm text-indigo-700 hover:bg-indigo-50"
                             >

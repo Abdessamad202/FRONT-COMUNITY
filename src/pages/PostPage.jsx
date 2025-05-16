@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useContext } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 
 import { usePost } from "../hooks/usePost";
@@ -12,10 +12,11 @@ import CommentItem from "../components/CommentItem";
 import { CommentForm } from "../components/CommentForm";
 import DeleteConfirmationModal from "../components/DeleteConfirmationModal";
 import Post from "../components/Post";
+import NotFound from "./NotFound";
 
 export default function PostPage() {
   const { id } = useParams();
-  const { post, isLoading, error } = usePost(id);
+  const { post, isLoading, error, isError } = usePost(id);
   const { data: user } = useUser();
   const queryClient = useQueryClient();
   const notify = useContext(NotificationContext);
@@ -33,16 +34,15 @@ export default function PostPage() {
       commentsContainerRef.current.scrollTop = commentsContainerRef.current.scrollHeight;
     }
   }, [post?.comments]);
-
   const addCommentMutation = useMutation({
     mutationFn: ({ postId, data }) => addComment(postId, data),
     onMutate: async ({ postId, data }) => {
       await queryClient.cancelQueries(["posts"]);
-      await queryClient.cancelQueries(["post",String(postId)]);
+      await queryClient.cancelQueries(["post", String(postId)]);
       await queryClient.cancelQueries(["profile", user.id]);
 
       const previousPosts = queryClient.getQueryData(["posts"]);
-      const previousSinglePost = queryClient.getQueryData(["post",String(postId)]);
+      const previousSinglePost = queryClient.getQueryData(["post", String(postId)]);
       const previousProfileData = queryClient.getQueryData(["profile", id]);
 
       const optimisticComment = {
@@ -79,7 +79,7 @@ export default function PostPage() {
       });
 
       // Optimistically update single post
-      queryClient.setQueryData(["post",String(postId)], (oldPost) => {
+      queryClient.setQueryData(["post", String(postId)], (oldPost) => {
         if (!oldPost) return oldPost;
         return {
           ...oldPost,
@@ -160,13 +160,18 @@ export default function PostPage() {
     <PostSkeleton />
   </div>
     ;
-  if (error) return <div className="p-4 text-red-500">Failed to load post.</div>;
+  if (isError && error?.response?.status === 404) {
+    return <NotFound />;
+  }
 
+  if (isError) {
+    return <div className="p-4 text-red-500">Failed to load post.</div>;
+  }
   return (
     <div className="flex flex-col md:flex-row mt-[64px] w-full bg-gray-100">
       {/* Left Side - Post Content */}
       <div className="md:w-7/12 h-full overflow-y-auto bg-white">
-        <Post post={post} />
+          <Post post={post} />
       </div>
 
       {/* Right Side - Comments Section */}

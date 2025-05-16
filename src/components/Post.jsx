@@ -10,7 +10,7 @@ import PostActions from "./PostActions";
 import CommentsModal from "./CommentsModal";
 import UpdatePostModal from "./UpdatePostModal";
 import LikesModal from "./LikesModal";
-import { useParams } from "react-router";
+import { Link, useLocation, useParams } from "react-router";
 
 export default function Post({ post }) {
     const queryClient = useQueryClient();
@@ -19,8 +19,8 @@ export default function Post({ post }) {
 
     // Audio effect
     const [likeSound] = useState(new Audio("/audios/mouth-plops-6688 (mp3cut.net).mp3"));
-    const { id } = useParams()
-    // Fetch post likers
+    const location = useLocation();
+    const isSinglePostPage = location.pathname.startsWith("/posts/");    // Fetch post likers
     const { data: likers = [] } = useQuery({
         queryKey: ["postLikers", post.id],
         queryFn: () => getPostLikers(post.id),
@@ -81,12 +81,12 @@ export default function Post({ post }) {
         onMutate: async (postId) => {
             await queryClient.cancelQueries({ queryKey: ["posts"] });
             await queryClient.cancelQueries({ queryKey: ["postLikers", postId] });
-            await queryClient.cancelQueries({ queryKey: ["profile", id] });
+            await queryClient.cancelQueries({ queryKey: ["profile", user?.id] });
             await queryClient.cancelQueries({ queryKey: ["post", String(postId)] });
 
             const previousPosts = queryClient.getQueryData(["posts"]);
             const previousLikers = queryClient.getQueryData(["postLikers", postId]);
-            const previousProfileData = queryClient.getQueryData(["profile", id]);
+            const previousProfileData = queryClient.getQueryData(["profile", user?.id]);
             const previousPost = queryClient.getQueryData(["post", String(postId)]);
 
             // Optimistically update "posts"
@@ -122,7 +122,7 @@ export default function Post({ post }) {
             });
 
             // Optimistically update "profile"
-            queryClient.setQueryData(["profile", id], (oldProfile) => {
+            queryClient.setQueryData(["profile", user?.id], (oldProfile) => {
                 if (!oldProfile) return oldProfile;
                 return {
                     ...oldProfile,
@@ -155,7 +155,7 @@ export default function Post({ post }) {
         onError: (err, postId, context) => {
             queryClient.setQueryData(["posts"], context.previousPosts);
             queryClient.setQueryData(["postLikers", postId], context.previousLikers);
-            queryClient.setQueryData(["profile", id], context.previousProfileData);
+            queryClient.setQueryData(["profile", user?.id], context.previousProfileData);
             queryClient.setQueryData(["post", String(postId)], context.previousPost);
             notify("error", "Failed to update like status");
             console.error("Error liking post:", err);
@@ -164,17 +164,19 @@ export default function Post({ post }) {
         onSettled: (data, error, postId) => {
             queryClient.invalidateQueries({ queryKey: ["posts"] });
             queryClient.invalidateQueries({ queryKey: ["postLikers", postId] });
-            queryClient.invalidateQueries({ queryKey: ["profile", id] });
+            queryClient.invalidateQueries({ queryKey: ["profile", user?.id] });
             queryClient.invalidateQueries({ queryKey: ["post", String(postId)] });
         },
     });
 
 
-    const handleLike = () => {
+    const handleLike = (e) => {
+        e.preventDefault();
+        // console.log("user",user);
+        
         if (!user) return;
 
         likeMutation.mutate(post.id);
-
         if (!isLiked) {
             likeSound.play().catch((error) => console.error("Audio play error: ", error));
         }
@@ -194,7 +196,6 @@ export default function Post({ post }) {
                     return [{ ...post, pivot: { created_at: new Date() } }, ...oldData];
                 }
             });
-
             setIsSaved(!isSaved);
             return { previousSavedPosts };
         },
@@ -211,14 +212,26 @@ export default function Post({ post }) {
         },
     });
 
-    const handleSave = () => {
+    const handleSave = (e) => {
+        e.preventDefault();
         if (!user) return;
         toggleSavePostMutation.mutate(post.id);
     };
 
-    const toggleModal = () => setIsModalOpen((prev) => !prev);
-    const toggleUpdateModal = () => setIsUpdateModalOpen((prev) => !prev);
-    const toggleLikesModal = () => setIsLikesModalOpen((prev) => !prev);
+    const toggleModal = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setIsModalOpen((prev) => !prev);
+        console.log("toggleModal", isModalOpen);
+        
+    }
+    const toggleUpdateModal = () => {
+        setIsUpdateModalOpen((prev) => !prev)
+    };
+    const toggleLikesModal = (e) => {
+        e.preventDefault();
+        setIsLikesModalOpen((prev) => !prev)
+    };
 
     const deletePostMutation = useMutation({
         mutationFn: deletePost,
@@ -259,18 +272,20 @@ export default function Post({ post }) {
     };
 
     if (!post) return null;
-
     return (
         <div className="bg-white rounded-xl shadow p-4 flex flex-col">
-            <PostHeader
-                post={post}
-                user={user}
-                handleDeletePost={handleDeletePost}
-                handleUpdatePost={toggleUpdateModal}
-            />
-            <div className="min-h-[200px] flex-grow">
-                <PostContent post={post} />
-            </div>
+
+            <Link to={`/posts/${post.id}`} className="flex flex-col flex-grow">
+                <PostHeader
+                    post={post}
+                    user={user}
+                    handleDeletePost={handleDeletePost}
+                    handleUpdatePost={toggleUpdateModal}
+                />
+                <div className="min-h-[200px] flex-grow">
+                    <PostContent post={post} />
+                </div>
+            </Link>
             <PostStats
                 likes={post?.likes_count}
                 comments={post?.comments_count}

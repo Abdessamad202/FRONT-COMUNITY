@@ -3,6 +3,7 @@ import { getPosts } from "../api/apiCalls";
 import Post from "./Post";
 import { Loader2 } from "lucide-react";
 import PostSkeleton from "./PostSkeleton";
+import { Link } from "react-router";
 
 export default function Posts() {
     const {

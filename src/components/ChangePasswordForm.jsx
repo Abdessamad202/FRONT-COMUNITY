@@ -83,7 +83,8 @@ const ChangePasswordForm = () => {
         </div>
         {errors.password_confirmation && (
           <p className="text-red-500 text-xs mt-1">{errors.password_confirmation}</p>
-        )} {/* ✅ Show confirmation error */}
+        )} 
+        {/* ✅ Show confirmation error */}
       </div>
 
       {/* General Error Message */}

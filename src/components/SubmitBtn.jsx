@@ -24,10 +24,4 @@ const SubmitBtn = ({ isPending, title, pandingTitle }) => {
 
   )
 }
-// proptypes
-SubmitBtn.propTypes = {
-  isPending: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
-  pandingTitle: PropTypes.string.isRequired,
-}
 export default SubmitBtn

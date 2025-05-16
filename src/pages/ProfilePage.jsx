@@ -204,13 +204,12 @@ const ProfilePage = () => {
               ) : (
                 <div className="flex items-center space-x-2">
                   <User
-                    className={`w-5 h-5 ${
-                      user?.profile?.gender === "M"
+                    className={`w-5 h-5 ${user?.profile?.gender === "M"
                         ? "text-blue-600"
                         : user?.profile?.gender === "F"
-                        ? "text-pink-600"
-                        : "text-gray-600"
-                    }`}
+                          ? "text-pink-600"
+                          : "text-gray-600"
+                      }`}
                   />
                   <span className="text-gray-900">{user?.profile?.name || "Unknown User"}</span>
                   {isOwnProfile && <span className="text-sm text-gray-500">(You)</span>}
@@ -300,11 +299,10 @@ const ProfilePage = () => {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-3 px-4 font-medium text-sm transition-colors ${
-                activeTab === tab
+              className={`flex-1 py-3 px-4 font-medium text-sm transition-colors ${activeTab === tab
                   ? "text-indigo-600 border-b-2 border-indigo-600"
                   : "text-gray-600 hover:text-gray-800"
-              }`}
+                }`}
             >
               {tab.charAt(0).toUpperCase() + tab.slice(1)}
             </button>
@@ -345,7 +343,9 @@ const ProfilePage = () => {
           ) : user?.posts?.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {user.posts.map((post) => (
-                <Post key={post.id} post={post} />
+                <Link to={`/posts/${post.id}`}>
+                  <Post key={`post-${post.id || i}`} post={post} />
+                </Link>
               ))}
             </div>
           ) : (
@@ -392,7 +392,7 @@ const ProfilePage = () => {
                   key={friend.id}
                   className="bg-white p-4 rounded-lg shadow-md border border-gray-200"
                 >
-                  <FriendItem friend={friend} removeFriendMutation={isOwnProfile ? removeFriendMutation : null} />
+                  <FriendItem friend={friend} isOwnProfile={isOwnProfile} removeFriendMutation={isOwnProfile ? removeFriendMutation : null} />
                 </div>
               ))}
             </div>

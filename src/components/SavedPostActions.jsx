@@ -1,8 +1,12 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toggleSavePost } from "../api/apiCalls";
+import { Bookmark } from "lucide-react";
+import { useContext } from "react";
+import { NotificationContext } from "../context/NotificationContext";
 
 const UnsavePostButton = ({ postId }) => {
   const queryClient = useQueryClient();
+  const notify = useContext(NotificationContext)
   
   const toggleSavePostMutation = useMutation({
     mutationFn: toggleSavePost,
@@ -19,6 +23,9 @@ const UnsavePostButton = ({ postId }) => {
       });
       
       return { previousSavedPosts };
+    },
+    onSuccess: ({status,message}) => {
+      notify(status,message)
     },
     onError: (err, postId, context) => {
       // If the mutation fails, use the context returned from onMutate to roll back

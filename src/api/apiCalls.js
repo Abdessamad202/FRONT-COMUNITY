@@ -6,7 +6,7 @@ export const logIn = async (formData) => {
 }
 export const register = async (data) => {
   const response = await apiClient.post('/register/', data,);
-  return response.data
+  return response.data 
 }
 
 export const logOut = async () => {
@@ -75,12 +75,6 @@ export const resetPassword = async (data) => {
   const response = await apiClient.post(`/reset-password`, data)
   return response.data
 }
-// export const verificationByLocation = (pathname,id,data) => {
-//   if (pathname === "/verify-code") {
-//     return checkCode(data,id)
-//   }
-//   return VerificationEmail(id ,data)
-// }
 export const VerificationEmail = async (data) => {
   const response = await apiClient.post(`/verify-email`, data)
   return response.data
@@ -89,16 +83,6 @@ export const validateResetCode = async (data) => {
   const response = await apiClient.post(`/validate-reset-code`, data)
   return response.data
 }
-// export const reSendCode = (pathname,id) => {
-//   if (pathname === "/verify-code") {
-//     return resendVerificationEmailCode(id)
-//   }
-//   return resendConfirmationEmailCode(id)
-// }
-// const resendConfirmationEmailCode = async (id) => {
-//   const response = await apiClient.post(`/register/confirm/resend-code/${id}`, {})
-//   return response.data
-// }
 export const resendVerificationEmailCode = async () => {
   const response = await apiClient.post(`/send-verification-code`, {})
   return response.data
@@ -127,14 +111,7 @@ export const getPosts = async ({ pageParam = 1 }) => {
   const response = await apiClient.get(`/posts?page=${pageParam}`);
   return response.data
 };
-// export const getCommetsPost = async (postId, pageParam) => {
-//   const response = await apiClient.get(`/posts/${postId}/comments?page=${pageParam}`);
-//   return {
-//     total : response.data.total,
-//     comments: response.data.comments,
-//     nextPage:response.data.nextPage ? pageParam + 1 : null
-//   };
-// }
+
 
 
 export const toggleLikePost = async (postId) => {
@@ -154,10 +131,7 @@ export const updateComment = async (postId, commentId, data) => {
   const response = await apiClient.put(`/posts/${postId}/comments/${commentId}`, data);
   return response.data;
 };
-// export const getUserPosts = async (userId) => {
-//   const response = await apiClient.get(`/user/${userId}/posts`)
-//   return response.data || []
-// }
+
 export const createPost = async (data) => {
   const response = await apiClient.post(`/posts`, data, {
     headers: {
@@ -191,3 +165,22 @@ export const getFriends = async ({ pageParam = 1 }) => {
   const response = await apiClient.get(`/friends?page=${pageParam}`);
   return response.data;
 };
+export const changePassword = async (data) => {
+  const response = await apiClient.patch(`/change-password`, data)
+  return response.data
+}
+export const readMessages = async (conversationId) => {
+  const response = await apiClient.post(`/read-messages/${conversationId}`)
+  return response.data
+}
+export const getConversations = async ({pageParam = 1}) => {
+  const response = await apiClient.get(`/conversations?page=${pageParam}`)
+  return response.data
+}
+export const sendMessage = async (conversation,message) => {
+const response = await apiClient.post(`/messages/${conversation}`, message);
+  return response.data;
+};
+export const typing = async (conversationId) => {
+  const response = await apiClient.post(`/typing`,{conversationId})
+}

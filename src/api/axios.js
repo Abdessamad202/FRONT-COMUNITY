@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: "http://backend_comunity_app.test/api",
+  baseURL: "http://community_backend.test/api",
   headers: {
     "Content-Type": "application/json",
     "Accept": "application/json",

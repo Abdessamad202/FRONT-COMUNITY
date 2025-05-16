@@ -1,6 +1,6 @@
 import ProfilePictureLink from "./ProfilePictureLink";
 
-export default function FriendItem({ friend, removeFriendMutation }) {
+export default function FriendItem({ friend, removeFriendMutation, isOwnProfile }) {
   const handleRemoveFriend = () => {
     removeFriendMutation.mutate(friend.id);
   };
@@ -20,18 +20,21 @@ export default function FriendItem({ friend, removeFriendMutation }) {
           <p className="text-gray-600 text-xs">{friend.profile.title}</p>
         )}
       </div>
-      <button
-        onClick={handleRemoveFriend}
-        className="px-3 py-1 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-700 rounded-md transition-colors"
-        disabled={
-          removeFriendMutation.isLoading && removeFriendMutation.variables === friend.id
-        }
-        aria-label={`Remove ${friend.profile?.name || "friend"}`}
-      >
-        {removeFriendMutation.isLoading && removeFriendMutation.variables === friend.id
-          ? "Removing..."
-          : "Remove"}
-      </button>
+      {isOwnProfile && (
+        <button
+          onClick={handleRemoveFriend}
+          className="px-3 py-1 text-xs font-medium text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-700 rounded-md transition-colors"
+          disabled={
+            removeFriendMutation.isLoading && removeFriendMutation.variables === friend.id
+          }
+          aria-label={`Remove ${friend.profile?.name || "friend"}`}
+        >
+          {removeFriendMutation.isLoading && removeFriendMutation.variables === friend.id
+            ? "Removing..."
+            : "Remove"}
+        </button>
+
+      )}
     </div>
   );
 }

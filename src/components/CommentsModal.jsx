@@ -199,6 +199,7 @@ export default function CommentsModal({ post, comments, toggleModal }) {
         className="fixed inset-0 bg-black/30 m-0 backdrop-blur-sm flex justify-center items-center p-4 z-50"
         onClick={toggleModal}
         role="dialog"
+        
         aria-modal="true"
         aria-labelledby="comments-modal-title"
       >

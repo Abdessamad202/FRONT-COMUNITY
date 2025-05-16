@@ -1,26 +1,19 @@
-import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useState, useEffect, use } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { X, Bookmark, Calendar, ThumbsUp, MessageCircle, Clock } from "lucide-react";
 import { formatDistanceToNow, format } from "date-fns";
 import { Link } from "react-router";
-import { fetchSavedPosts } from "../api/apiCalls";
+import { fetchSavedPosts, toggleSavePost } from "../api/apiCalls";
 import ProfilePictureLink from "./ProfilePictureLink";
+import { UnsavePostButton } from "./SavedPostActions";
 
 const SavedPostsModal = ({ toggleModal }) => {
-  const [localPosts, setLocalPosts] = useState([]);
 
   // Fetch saved posts
   const { data: savedPosts = [], isLoading, error } = useQuery({
     queryKey: ["savedPosts"],
     queryFn: fetchSavedPosts,
   });
-
-  useEffect(() => {
-    if (savedPosts.length > 0) {
-      setLocalPosts(savedPosts);
-    }
-  }, [savedPosts]);
-
   // Handle body scroll lock
   useEffect(() => {
     document.body.style.overflow = "hidden";
@@ -51,9 +44,7 @@ const SavedPostsModal = ({ toggleModal }) => {
 
   // Handle post unsave (would need to be implemented with toggleSavePost mutation)
   const handleUnsave = (postId) => {
-    // This would be where you call the mutation to unsave the post
-    // For now, let's just remove it from the local state for UI feedback
-    setLocalPosts(localPosts.filter(post => post.id !== postId));
+    toggleSavePostMutation.mutate(postId)
   };
 
   return (
@@ -98,7 +89,7 @@ const SavedPostsModal = ({ toggleModal }) => {
             <div className="text-center py-8 text-red-500">
               <p>Failed to load saved posts. Please try again.</p>
             </div>
-          ) : localPosts.length === 0 ? (
+          ) : savedPosts.length === 0 ? (
             <div className="text-center py-12">
               <Bookmark className="h-12 w-12 text-gray-300 mx-auto mb-4" />
               <h3 className="text-lg font-medium text-gray-900 mb-1">No saved posts yet</h3>
@@ -106,7 +97,7 @@ const SavedPostsModal = ({ toggleModal }) => {
             </div>
           ) : (
             <div className="flex flex-col space-y-4">
-              {localPosts.map((post) => {
+              {savedPosts.map((post) => {
                 const savedTime = formatSavedAt(post.pivot.created_at || post.updated_at);
 
                 return (
@@ -127,13 +118,7 @@ const SavedPostsModal = ({ toggleModal }) => {
                       </Link>
 
                       {/* Unsave button */}
-                      <button
-                        className="ml-auto p-1.5 rounded-full hover:bg-gray-200 transition-colors"
-                        onClick={() => handleUnsave(post.id)}
-                        title="Unsave post"
-                      >
-                        <Bookmark className="h-4 w-4 text-indigo-600 fill-indigo-600" />
-                      </button>
+                      <UnsavePostButton postId={post.id} />
                     </div>
 
                     {/* Post content summary */}

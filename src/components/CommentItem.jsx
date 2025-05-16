@@ -29,8 +29,9 @@ export default function CommentItem({
 
     console.log(comment);
 
-    const isUserComment = comment.user?.id === currentUser?.id;
-
+    // const isCommentOwner = comment.user?.id === currentUser?.id;
+    const isPostOwner = post.user_id == currentUser?.id;
+    const isCommentOwner = comment.user?.id === currentUser?.id;
     const updateCommentMutation = useMutation({
         mutationFn: ({ postId, commentId, data }) => updateComment(postId, commentId, data),
 
@@ -158,18 +159,18 @@ export default function CommentItem({
                 className="w-8 h-8 rounded-full object-cover flex-shrink-0"
             />
             <div className="flex-1">
-                <div className={`${isUserComment ? 'bg-indigo-50' : 'bg-gray-100'} p-3 rounded-2xl relative`}>
+                <div className={`${isCommentOwner ? 'bg-indigo-50' : 'bg-gray-100'} p-3 rounded-2xl relative`}>
                     <div className="flex justify-between items-start">
                         <div className="font-medium text-gray-800 text-sm flex items-center">
                             {comment.user?.profile?.name}
-                            {isUserComment && (
+                            {isCommentOwner && (
                                 <span className="ml-2 text-xs bg-indigo-100 text-indigo-600 px-1.5 py-0.5 rounded-full">
                                     You
                                 </span>
                             )}
                         </div>
-                        {isUserComment && (
-                            <div className="flex space-x-1">
+                        <div className="flex space-x-1">
+                            {isCommentOwner && (
                                 <button
                                     onClick={() => handleEditComment(comment)}
                                     className="p-1 text-gray-400 hover:text-indigo-600 transition-colors rounded-full hover:bg-indigo-50"
@@ -177,6 +178,8 @@ export default function CommentItem({
                                 >
                                     <Edit className="w-3.5 h-3.5" />
                                 </button>
+                            )}
+                            {(isPostOwner || isCommentOwner) && (
                                 <button
                                     onClick={() => openDeleteConfirm(comment.id)}
                                     className="p-1 text-gray-400 hover:text-red-600 transition-colors rounded-full hover:bg-red-50"
@@ -184,8 +187,9 @@ export default function CommentItem({
                                 >
                                     <Trash2 className="w-3.5 h-3.5" />
                                 </button>
-                            </div>
-                        )}
+                            )}
+                        </div>
+
                     </div>
 
                     {editingComment === comment.id ? (

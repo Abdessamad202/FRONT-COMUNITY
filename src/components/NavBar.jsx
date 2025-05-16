@@ -146,7 +146,7 @@ const NavBar = () => {
                         {user?.profile?.name || "User"}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {user?.profile?.email || "example@email.com"}
+                        {user?.email || "example@email.com"}
                       </div>
                     </div>
                   </div>
@@ -205,7 +205,7 @@ const NavBar = () => {
                   {user?.profile?.name || "User"}
                 </div>
                 <div className="text-xs text-gray-500">
-                  {user?.profile?.email || "example@email.com"}
+                  {user?.email || "example@email.com"}
                 </div>
               </div>
             </div>

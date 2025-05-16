@@ -17,7 +17,12 @@ import Posts from './components/Posts'
 import ProfilePage from './pages/ProfilePage'
 import ScrollToTop from './components/ScrollToTop'
 import PostPage from './pages/PostPage'
+import SettingsPage from './pages/SettingsPage'
+import PasswordInput from './components/PasswordInput'
+import { useState } from 'react'
+import Conversations from './pages/Conversations'
 function App() {
+  const [state, setState] = useState('')
   return (
     <>
       <ScrollToTop />
@@ -38,11 +43,14 @@ function App() {
             <Route path='/home' element={<HomePage />} />
             <Route path='/profile/:id' element={<ProfilePage />} />
             <Route path='/posts/:id' element={<PostPage />} />
+            <Route path='/settings' element={<SettingsPage />} />
+            <Route path='/messages' element={<Conversations />} />
           </Route>
+          <Route path='/test' element={<PasswordInput onChange={(e) => setState(e.target.value)} value={state} />} />
+
         </Route>
         <Route path='/modal' element={<ModalPage />} />
         <Route path='/post' element={<PostPage />} />
-
       </Routes>
     </>
   )

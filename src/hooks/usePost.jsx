@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { fetchPost } from "../api/apiCalls"
 
 export const usePost = (id) => {
-    const { data: post, isLoading, error } = useQuery({
+    const { data: post,isError, isLoading, error } = useQuery({
         queryKey: ['post', String(id)],
         queryFn: () => fetchPost(id),
         enabled: !!id,
@@ -11,5 +11,5 @@ export const usePost = (id) => {
         refetchOnWindowFocus: false,
         refetchOnMount: false,
     })
-    return { post, isLoading, error }
+    return { post, isLoading, error, isError }
 }

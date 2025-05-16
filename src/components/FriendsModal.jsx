@@ -101,7 +101,6 @@ export default function FriendsModal({ user, toggleModal }) {
     >
       <div
         className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden relative animate-fade-scale"
-        onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="p-4 border-b border-gray-200 flex justify-between items-center">
