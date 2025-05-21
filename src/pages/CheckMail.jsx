@@ -1,4 +1,4 @@
-import ForgetPasswordSteps from "../../../comunity_app_front/src/components/ForgetPasswordSteps";
+// import ForgetPasswordSteps from "../../components/ForgetPasswordSteps";
 import ForgotPasswordForm from "../components/ForgetPasswordForm";
 import FormHeader from "../components/FormHeader";
 
